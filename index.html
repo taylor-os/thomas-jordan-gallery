@@ -1,0 +1,1595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thomas Jordan Gallery — Sports & Entertainment Art</title>
+    <meta name="description" content="Unique and whimsical oil paintings celebrating sports and entertainment — NFL, MLB, NBA, college football, music tributes, and classic entertainment. Commissions welcome.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --black: #080808;
+            --dark: #111111;
+            --card-bg: #181818;
+            --border: rgba(255,255,255,0.07);
+            --gold: #FFD700;
+            --gold-dim: rgba(255,215,0,0.15);
+            --pink: #FF3CAC;
+            --cyan: #00F5FF;
+            --green: #39FF14;
+            --white: #F0F0F0;
+            --gray: #777;
+            --gray-light: #aaa;
+        }
+
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--black);
+            color: var(--white);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* ── CURSOR ── */
+        .cursor {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            background: var(--gold);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%,-50%);
+            transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease, background 0.3s ease;
+            mix-blend-mode: difference;
+        }
+        .cursor-ring {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255,215,0,0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%,-50%);
+            transition: transform 0.15s ease, width 0.3s ease, height 0.3s ease;
+        }
+        body:hover .cursor { opacity: 1; }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            padding: 1.8rem 5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.5s ease;
+        }
+        nav.scrolled {
+            background: rgba(8,8,8,0.9);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            padding: 1rem 5rem;
+            border-bottom: 1px solid rgba(255,215,0,0.15);
+            box-shadow: 0 4px 40px rgba(0,0,0,0.6);
+        }
+        .nav-logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.2rem;
+            letter-spacing: 0.05em;
+            color: var(--green);
+            text-shadow: 0 0 25px rgba(57,255,20,0.6), 0 0 60px rgba(57,255,20,0.2);
+            text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+            align-items: center;
+        }
+        .nav-links a {
+            color: rgba(240,240,240,0.7);
+            text-decoration: none;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+        }
+        .nav-links a:hover { color: var(--gold); }
+        .nav-store {
+            background: var(--gold) !important;
+            color: var(--black) !important;
+            padding: 0.55rem 1.4rem;
+            font-weight: 700 !important;
+            clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+        }
+        .nav-store:hover { background: #fff !important; color: var(--black) !important; }
+
+        /* ── HERO ── */
+        #hero {
+            position: relative;
+            height: 100vh;
+            min-height: 700px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        #hero-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .hero-vignette {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, transparent 30%, rgba(8,8,8,0.85) 100%);
+            pointer-events: none;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 0 2rem;
+        }
+        .hero-eyebrow {
+            font-size: 0.7rem;
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            color: var(--green);
+            text-shadow: 0 0 15px rgba(57,255,20,0.7);
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.4s forwards;
+        }
+        .hero-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(5rem, 16vw, 15rem);
+            line-height: 0.88;
+            letter-spacing: 0.015em;
+        }
+        .hero-title .ln1 {
+            display: block;
+            color: var(--white);
+            opacity: 0;
+            transform: translateY(80px) skewX(-3deg);
+            animation: smashUp 1s cubic-bezier(0.16,1,0.3,1) 0.6s forwards;
+        }
+        .hero-title .ln2 {
+            display: block;
+            color: transparent;
+            -webkit-text-stroke: 2px var(--gold);
+            opacity: 0;
+            transform: translateY(80px) skewX(-3deg);
+            animation: smashUp 1s cubic-bezier(0.16,1,0.3,1) 0.82s forwards;
+            filter: drop-shadow(0 0 25px rgba(255,215,0,0.5));
+        }
+        .hero-title .ln3 {
+            display: block;
+            color: var(--white);
+            opacity: 0;
+            transform: translateY(80px) skewX(-3deg);
+            animation: smashUp 1s cubic-bezier(0.16,1,0.3,1) 1.0s forwards;
+        }
+        .hero-sub {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: clamp(0.95rem, 2.2vw, 1.4rem);
+            color: var(--gray-light);
+            margin-top: 2rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 1.5s forwards;
+        }
+        .hero-cta {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            margin-top: 3.5rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 1.8s forwards;
+            flex-wrap: wrap;
+        }
+        .btn-primary {
+            background: var(--green);
+            color: var(--black);
+            padding: 1.1rem 2.8rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            text-decoration: none;
+            clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+            transition: all 0.3s ease;
+            box-shadow: 0 0 25px rgba(57,255,20,0.4);
+        }
+        .btn-primary:hover {
+            background: var(--white);
+            box-shadow: 0 0 50px rgba(57,255,20,0.6);
+            transform: translateY(-2px);
+        }
+        .btn-outline {
+            border: 1px solid rgba(240,240,240,0.25);
+            color: var(--white);
+            padding: 1.1rem 2.8rem;
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            text-decoration: none;
+            clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+            transition: all 0.3s ease;
+        }
+        .btn-outline:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+            box-shadow: 0 0 30px rgba(255,215,0,0.2);
+        }
+        .scroll-cue {
+            position: absolute;
+            bottom: 2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 2.2s forwards;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .scroll-cue span {
+            font-size: 0.6rem;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--gray);
+        }
+        .scroll-line {
+            width: 1px;
+            height: 55px;
+            background: linear-gradient(to bottom, var(--gold), transparent);
+            animation: linePulse 2.5s ease infinite;
+        }
+
+        /* ── TICKER ── */
+        .ticker-wrap {
+            position: relative;
+            background: var(--dark);
+            padding: 1.1rem 0;
+            overflow: hidden;
+            border-top: 1px solid rgba(255,215,0,0.2);
+            border-bottom: 1px solid rgba(255,215,0,0.2);
+        }
+        .ticker-track {
+            display: flex;
+            white-space: nowrap;
+            animation: scroll-left 80s linear infinite;
+        }
+        .ticker-item {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.05rem;
+            letter-spacing: 0.12em;
+            padding: 0 2.5rem;
+            color: var(--gold);
+        }
+        .ticker-item:nth-child(3n+2) { color: var(--pink); }
+        .ticker-item:nth-child(3n+3) { color: var(--cyan); }
+        .ticker-sep {
+            font-size: 0.5rem;
+            color: rgba(255,255,255,0.2);
+            align-self: center;
+        }
+
+        /* ── SHARED SECTION STYLES ── */
+        .section { padding: 9rem 6rem; }
+        .section-sm { padding: 6rem 6rem; }
+        .lbl {
+            display: inline-block;
+            font-size: 0.65rem;
+            letter-spacing: 0.45em;
+            text-transform: uppercase;
+            color: var(--green);
+            margin-bottom: 1.2rem;
+        }
+        .lbl-pink { color: var(--pink); }
+        .lbl-cyan { color: var(--cyan); }
+        .lbl-gold { color: var(--gold); }
+        .sec-h {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(3.5rem, 8vw, 7.5rem);
+            line-height: 0.88;
+            margin-bottom: 3.5rem;
+        }
+
+        /* ── WELCOME ── */
+        #welcome {
+            background: var(--black);
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 7rem;
+            align-items: center;
+        }
+        .welcome-quote {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: clamp(1.15rem, 2vw, 1.6rem);
+            color: var(--white);
+            line-height: 1.6;
+            padding-left: 2rem;
+            border-left: 3px solid var(--gold);
+            margin-bottom: 2.5rem;
+        }
+        .welcome-body {
+            color: var(--gray-light);
+            line-height: 1.9;
+            font-size: 0.95rem;
+        }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        .stat {
+            padding: 2.2rem;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+        .stat::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 3px; height: 100%;
+            background: var(--gold);
+        }
+        .stat::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,215,0,0.04) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .stat:hover { border-color: rgba(255,215,0,0.3); transform: translateY(-5px); }
+        .stat:hover::after { opacity: 1; }
+        .stat-n {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3.2rem;
+            line-height: 1;
+            color: var(--gold);
+            text-shadow: 0 0 30px rgba(255,215,0,0.3);
+        }
+        .stat-l {
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gray);
+            margin-top: 0.6rem;
+        }
+
+        /* ── ON THE EASEL ── */
+        #easel {
+            background: var(--dark);
+            clip-path: polygon(0 3.5%, 100% 0, 100% 96.5%, 0 100%);
+            padding: 11rem 6rem;
+        }
+        .easel-hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            margin-bottom: 6rem;
+            align-items: center;
+        }
+        .easel-frame {
+            aspect-ratio: 4/3;
+            background: var(--card-bg);
+            border: 1px solid rgba(255,215,0,0.15);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .easel-frame::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 30% 30%, rgba(255,215,0,0.06) 0%, transparent 70%);
+        }
+        .easel-frame-inner {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3.5rem;
+            line-height: 1.1;
+            color: rgba(255,215,0,0.12);
+            text-align: center;
+            padding: 2rem;
+            letter-spacing: 0.05em;
+        }
+        .badge-live {
+            position: absolute;
+            top: 1.5rem; left: 1.5rem;
+            background: var(--green);
+            color: var(--black);
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            padding: 0.4rem 1rem;
+        }
+        .badge-live::before {
+            content: '';
+            display: inline-block;
+            width: 6px; height: 6px;
+            background: var(--black);
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            animation: blink 1.5s ease infinite;
+        }
+        .easel-info h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            line-height: 1;
+            color: var(--gold);
+            text-shadow: 0 0 40px rgba(255,215,0,0.3);
+            margin-bottom: 2rem;
+        }
+        .easel-info p {
+            color: var(--gray-light);
+            line-height: 1.9;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+        .recent-label {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 0.08em;
+            color: rgba(255,255,255,0.15);
+            margin-bottom: 2rem;
+            display: block;
+        }
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 1.5rem;
+        }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 2rem 2rem 2rem 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 3px; height: 100%;
+            background: var(--card-accent, var(--gold));
+            transform: scaleY(0.3);
+            transform-origin: top;
+            transition: transform 0.4s ease;
+        }
+        .card::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 2px;
+            background: var(--card-accent, var(--gold));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+        .card:hover {
+            border-color: rgba(255,255,255,0.12);
+            transform: translateY(-6px);
+            box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+        }
+        .card:hover::before { transform: scaleY(1); }
+        .card:hover::after { transform: scaleX(1); }
+        .card-t {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.45rem;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.75rem;
+        }
+        .card-d {
+            font-size: 0.83rem;
+            color: var(--gray);
+            line-height: 1.75;
+        }
+
+        /* ── COLLECTIONS ── */
+        #collections {
+            background: var(--black);
+            padding: 9rem 0;
+        }
+        .collections-header {
+            padding: 0 6rem;
+            margin-bottom: 4rem;
+        }
+        .coll-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+        .coll {
+            position: relative;
+            padding: 5rem 5rem 5rem 5rem;
+            min-height: 420px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+        .coll::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .coll:hover::after { opacity: 1; }
+        .coll-ghost {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 11rem;
+            opacity: 0.05;
+            white-space: nowrap;
+            pointer-events: none;
+            transition: opacity 0.4s ease, transform 0.6s ease;
+        }
+        .coll:hover .coll-ghost {
+            opacity: 0.1;
+            transform: translate(-50%, -50%) scale(1.08);
+        }
+        .coll-num {
+            font-size: 0.6rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+            position: relative;
+        }
+        .coll-t {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2rem, 3.5vw, 3rem);
+            line-height: 1;
+            margin-bottom: 1.8rem;
+            position: relative;
+        }
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            position: relative;
+        }
+        .tag {
+            font-size: 0.68rem;
+            letter-spacing: 0.1em;
+            padding: 0.3rem 0.85rem;
+            border: 1px solid rgba(255,255,255,0.12);
+            color: var(--gray);
+            transition: all 0.25s ease;
+            cursor: default;
+        }
+
+        /* Collection color themes */
+        .coll-music { background: linear-gradient(155deg, #150010 0%, #220028 100%); }
+        .coll-music::after { background: linear-gradient(155deg, rgba(255,60,172,0.05) 0%, transparent 100%); }
+        .coll-music .coll-num, .coll-music .coll-ghost { color: var(--pink); }
+        .coll-music .tag:hover { border-color: var(--pink); color: var(--pink); }
+
+        .coll-classic { background: linear-gradient(155deg, #001515 0%, #002525 100%); }
+        .coll-classic::after { background: linear-gradient(155deg, rgba(0,245,255,0.05) 0%, transparent 100%); }
+        .coll-classic .coll-num, .coll-classic .coll-ghost { color: var(--cyan); }
+        .coll-classic .tag:hover { border-color: var(--cyan); color: var(--cyan); }
+
+        .coll-sports { background: linear-gradient(155deg, #141400 0%, #222200 100%); }
+        .coll-sports::after { background: linear-gradient(155deg, rgba(255,215,0,0.06) 0%, transparent 100%); }
+        .coll-sports .coll-num, .coll-sports .coll-ghost { color: var(--gold); }
+        .coll-sports .tag:hover { border-color: var(--gold); color: var(--gold); }
+
+        .coll-rivalry { background: linear-gradient(155deg, #0a0a18 0%, #12122a 100%); }
+        .coll-rivalry::after { background: linear-gradient(155deg, rgba(57,255,20,0.04) 0%, transparent 100%); }
+        .coll-rivalry .coll-num, .coll-rivalry .coll-ghost { color: var(--green); }
+        .coll-rivalry .tag:hover { border-color: var(--green); color: var(--green); }
+
+        /* ── TEAMS ── */
+        #teams {
+            background: var(--dark);
+            clip-path: polygon(0 2.5%, 100% 0, 100% 97.5%, 0 100%);
+            padding: 11rem 6rem;
+        }
+        .league {
+            margin-bottom: 4.5rem;
+        }
+        .league-h {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.6rem;
+            letter-spacing: 0.12em;
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,215,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .league-h::before {
+            content: '';
+            display: inline-block;
+            width: 8px; height: 8px;
+            background: var(--gold);
+            box-shadow: 0 0 15px var(--gold);
+        }
+        .chip-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        .chip {
+            font-size: 0.78rem;
+            letter-spacing: 0.06em;
+            padding: 0.55rem 1.3rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(240,240,240,0.7);
+            transition: all 0.25s ease;
+            cursor: default;
+        }
+        .chip:hover {
+            background: var(--gold);
+            color: var(--black);
+            border-color: var(--gold);
+            box-shadow: 0 0 20px rgba(255,215,0,0.3);
+            transform: translateY(-2px);
+        }
+
+        /* ── BIO ── */
+        #bio {
+            background: var(--black);
+            position: relative;
+            overflow: hidden;
+            padding: 11rem 6rem;
+        }
+        .bio-watermark {
+            position: absolute;
+            top: 50%;
+            left: -3%;
+            transform: translateY(-50%);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(15rem, 28vw, 28rem);
+            color: rgba(255,215,0,0.025);
+            white-space: nowrap;
+            pointer-events: none;
+            line-height: 1;
+            user-select: none;
+        }
+        .bio-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.6fr;
+            gap: 8rem;
+            align-items: start;
+            position: relative;
+        }
+        .bio-left .mono {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(9rem, 18vw, 18rem);
+            line-height: 0.8;
+            color: var(--gold);
+            opacity: 0.12;
+            display: block;
+            margin-bottom: -3rem;
+        }
+        .bio-left h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(3.5rem, 7vw, 6rem);
+            line-height: 0.9;
+            position: relative;
+        }
+        .bio-left .role {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: var(--gold);
+            display: block;
+            margin-top: 1.2rem;
+        }
+        .bio-right blockquote {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: clamp(1rem, 1.8vw, 1.3rem);
+            line-height: 1.75;
+            color: var(--white);
+            padding-left: 2rem;
+            border-left: 3px solid var(--green);
+            margin-bottom: 3rem;
+        }
+        .bio-right p {
+            color: var(--gray-light);
+            line-height: 1.95;
+            font-size: 0.93rem;
+            margin-bottom: 1.5rem;
+        }
+        .bio-facts {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 3rem;
+        }
+        .fact {
+            padding: 1.6rem;
+            background: var(--dark);
+            border-left: 2px solid var(--gold);
+        }
+        .fact-l {
+            font-size: 0.6rem;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--gray);
+            margin-bottom: 0.4rem;
+        }
+        .fact-v {
+            font-size: 0.88rem;
+            color: var(--white);
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        /* ── DAISY ── */
+        .daisy-strip {
+            background: var(--dark);
+            padding: 5.5rem 6rem;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+        .daisy-paw { font-size: 3.5rem; display: block; margin-bottom: 1.5rem; }
+        .daisy-h {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            color: var(--pink);
+            text-shadow: 0 0 40px rgba(255,60,172,0.4);
+            margin-bottom: 1rem;
+        }
+        .daisy-p {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            color: var(--gray-light);
+            max-width: 620px;
+            margin: 0 auto;
+            line-height: 1.75;
+        }
+
+        /* ── SHOWS ── */
+        #shows {
+            background: var(--black);
+            padding: 9rem 6rem;
+        }
+        .shows-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            margin-top: 4rem;
+        }
+        .shows-col h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 2.5rem;
+        }
+        .upcoming-h { color: var(--green); text-shadow: 0 0 20px rgba(57,255,20,0.4); }
+        .past-h { color: var(--gray); }
+        .show {
+            display: grid;
+            grid-template-columns: 70px 1fr;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding-bottom: 2.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .show-d .mo {
+            font-size: 0.6rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+        .show-d .dy {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            line-height: 1;
+            color: var(--white);
+        }
+        .show-i .s-name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .show-i .s-loc {
+            font-size: 0.8rem;
+            color: var(--gray);
+            letter-spacing: 0.05em;
+        }
+        .live-dot {
+            width: 7px; height: 7px;
+            background: var(--green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--green);
+            animation: blink 1.8s ease infinite;
+        }
+
+        /* ── COMMUNITY ── */
+        .community {
+            background: var(--dark);
+            padding: 7rem 6rem;
+            text-align: center;
+        }
+        .community-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 900px;
+            margin: 3.5rem auto 0;
+        }
+
+        /* ── CONTACT ── */
+        #contact {
+            background: var(--black);
+            padding: 9rem 6rem;
+        }
+        .contact-layout {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 8rem;
+            margin-top: 4rem;
+        }
+        .contact-left h3 {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: clamp(1.1rem, 2vw, 1.45rem);
+            color: var(--white);
+            line-height: 1.6;
+            margin-bottom: 3rem;
+        }
+        .ci {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            margin-bottom: 1rem;
+            transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+        .ci:hover {
+            border-color: rgba(255,215,0,0.3);
+            transform: translateX(6px);
+        }
+        .ci-icon { font-size: 1.5rem; width: 2.5rem; text-align: center; flex-shrink: 0; }
+        .ci-lbl { font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gray); margin-bottom: 0.3rem; }
+        .ci-val { font-size: 1rem; font-weight: 500; }
+        .ci-val a { color: var(--white); text-decoration: none; transition: color 0.2s ease; }
+        .ci-val a:hover { color: var(--gold); }
+        .socials { display: flex; flex-direction: column; gap: 0.85rem; }
+        .soc {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            padding: 1.2rem 1.5rem;
+            border: 1px solid var(--border);
+            text-decoration: none;
+            color: rgba(240,240,240,0.7);
+            font-size: 0.82rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            transition: all 0.3s ease;
+        }
+        .soc:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+            padding-left: 2rem;
+        }
+        .soc-dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: var(--gold);
+            box-shadow: 0 0 8px rgba(255,215,0,0.6);
+            flex-shrink: 0;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--dark);
+            padding: 3rem 6rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .footer-logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.4rem;
+            color: var(--green);
+            text-shadow: 0 0 25px rgba(57,255,20,0.5);
+        }
+        .footer-mid p {
+            font-size: 0.75rem;
+            color: var(--gray);
+            letter-spacing: 0.08em;
+            text-align: center;
+            line-height: 1.7;
+        }
+        .footer-daisy {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.15);
+            font-style: italic;
+        }
+
+        /* ── REVEAL ANIMATIONS ── */
+        .rv, .rv-l, .rv-r {
+            opacity: 0;
+            transition: opacity 0.85s ease, transform 0.85s ease;
+        }
+        .rv { transform: translateY(45px); }
+        .rv-l { transform: translateX(-45px); }
+        .rv-r { transform: translateX(45px); }
+        .rv.on, .rv-l.on, .rv-r.on { opacity: 1; transform: none; }
+
+        /* ── KEYFRAMES ── */
+        @keyframes smashUp {
+            to { opacity: 1; transform: translateY(0) skewX(0); }
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes scroll-left {
+            from { transform: translateX(0); }
+            to   { transform: translateX(-50%); }
+        }
+        @keyframes linePulse {
+            0%,100% { opacity: 0.2; transform: scaleY(0.7); }
+            50%      { opacity: 1;   transform: scaleY(1); }
+        }
+        @keyframes blink {
+            0%,100% { opacity: 1; }
+            50%      { opacity: 0.3; }
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 1100px) {
+            .section, .section-sm { padding: 7rem 3.5rem; }
+            #welcome { grid-template-columns: 1fr; gap: 4rem; }
+            .easel-hero { grid-template-columns: 1fr; }
+            .coll-grid { grid-template-columns: 1fr; }
+            .bio-grid { grid-template-columns: 1fr; gap: 3rem; }
+            .bio-left .mono { font-size: 8rem; }
+            .shows-grid { grid-template-columns: 1fr; gap: 3rem; }
+            .contact-layout { grid-template-columns: 1fr; gap: 3rem; }
+            #easel, #teams { clip-path: none; padding: 7rem 3.5rem; }
+            footer { flex-direction: column; gap: 2rem; text-align: center; }
+            nav { padding: 1.5rem 2rem; }
+            nav.scrolled { padding: 1rem 2rem; }
+            .nav-links { display: none; }
+            .collections-header { padding: 0 3.5rem; }
+            .coll { padding: 4rem 3.5rem; }
+            #bio { padding: 7rem 3.5rem; }
+            #shows, #contact { padding: 7rem 3.5rem; }
+            .community { padding: 5rem 3.5rem; }
+            .daisy-strip { padding: 5rem 3.5rem; }
+        }
+        @media (max-width: 640px) {
+            .stat-grid { grid-template-columns: 1fr; }
+            .community-cards { grid-template-columns: 1fr; }
+            .bio-facts { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav id="nav">
+    <a href="#hero" class="nav-logo">TJG</a>
+    <ul class="nav-links">
+        <li><a href="#easel">On The Easel</a></li>
+        <li><a href="#collections">Collections</a></li>
+        <li><a href="#teams">Teams</a></li>
+        <li><a href="#bio">Artist Bio</a></li>
+        <li><a href="#shows">Shows</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="https://thomas-jordan-gallery.myshopify.com" target="_blank" class="nav-store">Store</a></li>
+    </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+    <canvas id="hero-canvas"></canvas>
+    <div class="hero-vignette"></div>
+    <div class="hero-content">
+        <p class="hero-eyebrow">Oil Paintings &nbsp;·&nbsp; Sports &amp; Entertainment Art</p>
+        <h1 class="hero-title">
+            <span class="ln1">Thomas</span>
+            <span class="ln2">Jordan</span>
+            <span class="ln3">Gallery</span>
+        </h1>
+        <p class="hero-sub">Unique &amp; Whimsical Sports and Entertainment Interpretations</p>
+        <div class="hero-cta">
+            <a href="#easel" class="btn-primary">View Collection</a>
+            <a href="#contact" class="btn-outline">Commission a Painting</a>
+        </div>
+    </div>
+    <div class="scroll-cue">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+    </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+    <div class="ticker-track" id="ticker"></div>
+</div>
+
+<!-- WELCOME -->
+<section id="welcome" class="section">
+    <div class="rv-l">
+        <span class="lbl">Welcome to the Gallery</span>
+        <h2 class="sec-h">Art That<br>Moves You</h2>
+        <p class="welcome-quote">"With all the creative high and low tech options people have to select art for their homes and places of business, it gives me a great sense of satisfaction that I can create an oil painting in my style that pleases them enough to want to own it."</p>
+        <p class="welcome-body">Tom's oil paintings showcase sports and entertainment themes in a unique and often whimsical style that has gained widespread appreciation. All creations are available online through the Thomas Jordan Gallery store, with original oil paintings available through direct contact. Commissions accepted for custom sports art paintings capturing your personal sports memories and moments.</p>
+    </div>
+    <div class="stat-grid rv-r">
+        <div class="stat">
+            <div class="stat-n">30+</div>
+            <div class="stat-l">Years of Creative Vision</div>
+        </div>
+        <div class="stat">
+            <div class="stat-n">50+</div>
+            <div class="stat-l">Unique Series &amp; Collections</div>
+        </div>
+        <div class="stat">
+            <div class="stat-n" style="font-size:2rem; line-height:1.3;">NFL · MLB<br>NBA · NCAA</div>
+            <div class="stat-l">Sports Leagues Covered</div>
+        </div>
+        <div class="stat">
+            <div class="stat-n">Open</div>
+            <div class="stat-l">Commissions Welcome</div>
+        </div>
+    </div>
+</section>
+
+<!-- ON THE EASEL -->
+<section id="easel">
+    <span class="lbl lbl-gold">Currently Creating</span>
+    <h2 class="sec-h rv">On The<br>Easel</h2>
+
+    <div class="easel-hero rv">
+        <div class="easel-frame">
+            <div class="badge-live">In Progress</div>
+            <div class="easel-frame-inner">HARRY<br>POTTER'S<br>STORY</div>
+        </div>
+        <div class="easel-info">
+            <h3>Harry Potter's Story</h3>
+            <p>Based on J.K. Rowling's seven-book fantasy series about a young wizard attending Hogwarts School of Witchcraft and Wizardry while battling the dark wizard Lord Voldemort.</p>
+            <p>The series has sold over 600 million copies globally — one of the best-selling book series in history — and continues to captivate audiences across generations worldwide.</p>
+            <br>
+            <a href="#contact" class="btn-outline" style="display:inline-block;">Inquire About Prints</a>
+        </div>
+    </div>
+
+    <span class="recent-label">Recently Completed</span>
+    <div class="cards-grid">
+        <div class="card rv" style="--card-accent: var(--cyan)">
+            <div class="card-t">Tolkien Classics</div>
+            <p class="card-d">The Hobbit and The Lord of the Rings trilogies directed by Peter Jackson, based on J.R.R. Tolkien's iconic novels.</p>
+        </div>
+        <div class="card rv" style="--card-accent: var(--cyan)">
+            <div class="card-t">Star Wars Saga</div>
+            <p class="card-d">George Lucas's epic space opera franchise beginning in 1977 — "a galaxy far, far away" phenomenon spanning generations.</p>
+        </div>
+        <div class="card rv" style="--card-accent: var(--gold)">
+            <div class="card-t">Indiana Hoosiers Tribute</div>
+            <p class="card-d">Celebrates the 2025 NCAA College Football Champions — second undefeated regular season, first national championship.</p>
+        </div>
+        <div class="card rv" style="--card-accent: var(--cyan)">
+            <div class="card-t">Pokemon Friends</div>
+            <p class="card-d">Originated in Japan (1996) by Game Freak's Satoshi Tajiri. Became global "Pokemania" through its 1998–2000 worldwide export.</p>
+        </div>
+        <div class="card rv" style="--card-accent: var(--gold)">
+            <div class="card-t">OKC Thunder Tribute</div>
+            <p class="card-d">2024–2025 NBA Champions. MVP Shai Gilgeous-Alexander and All-NBA third team member Jalen Williams defeated Indiana Pacers in 7 games.</p>
+        </div>
+        <div class="card rv" style="--card-accent: var(--pink)">
+            <div class="card-t">Prince Tribute</div>
+            <p class="card-d">Multi-instrumentalist, flamboyant icon. 100M+ records sold. Rock and Roll Hall of Fame inductee 2004. Est. 500–1,000+ songs written.</p>
+        </div>
+        <div class="card rv" style="--card-accent: var(--pink)">
+            <div class="card-t">Queen Tribute</div>
+            <p class="card-d">Freddie Mercury, Brian May, Roger Taylor, John Deacon. 250–300M records sold. Brit Award 1990. Rock Hall inductees 2001.</p>
+        </div>
+        <div class="card rv" style="--card-accent: var(--pink)">
+            <div class="card-t">Grateful Dead Tribute</div>
+            <p class="card-d">Celebrating the legendary band and their iconic Dead Heads community across decades of unforgettable music.</p>
+        </div>
+        <div class="card rv" style="--card-accent: var(--green)">
+            <div class="card-t">A Salute to Our Armed Forces</div>
+            <p class="card-d">A tribute respecting the five original military service branches protecting and defending our nation.</p>
+        </div>
+        <div class="card rv" style="--card-accent: var(--pink)">
+            <div class="card-t">The Beatles Tribute</div>
+            <p class="card-d">"The Fab Four" — a comprehensive music entertainment painting honoring the most influential band in history.</p>
+        </div>
+        <div class="card rv" style="--card-accent: var(--pink)">
+            <div class="card-t">Taylor Swift Tribute</div>
+            <p class="card-d">Most-requested painting of the 2024 fall show season. First 2025 completion with spring show prints now available.</p>
+        </div>
+        <div class="card rv" style="--card-accent: var(--pink)">
+            <div class="card-t">It's All Country</div>
+            <p class="card-d">Country music originating in the 1920s Southern U.S. — ballads, folk lyrics, banjos, fiddles, harmonicas, and guitars.</p>
+        </div>
+        <div class="card rv" style="--card-accent: var(--pink)">
+            <div class="card-t">Hip Hop &amp; Rap</div>
+            <p class="card-d">Emerged from 1970s Bronx street sound. Now a multi-billion-dollar global entertainment industry and cultural force.</p>
+        </div>
+        <div class="card rv" style="--card-accent: var(--pink)">
+            <div class="card-t">Guitar Legends</div>
+            <p class="card-d">Legendary guitar players spanning multiple genres and eras — the icons who defined the sound of generations.</p>
+        </div>
+        <div class="card rv" style="--card-accent: var(--pink)">
+            <div class="card-t">Rock Stars Tribute</div>
+            <p class="card-d">1960s-originating concept celebrating the luminescent musicians who defined rock and roll across generations.</p>
+        </div>
+        <div class="card rv" style="--card-accent: var(--gold)">
+            <div class="card-t">Wimbledon Champions Tribute</div>
+            <p class="card-d">Tennis's oldest tournament since 1877. The only major on grass — one of four Grand Slams alongside the Australian Open, French Open, and US Open.</p>
+        </div>
+        <div class="card rv" style="--card-accent: var(--cyan)">
+            <div class="card-t">Gamer Favorites Commission</div>
+            <p class="card-d">A personalized video game covers display — updated from the original Classic Video Games painting for a private commission.</p>
+        </div>
+        <div class="card rv" style="--card-accent: var(--gold)">
+            <div class="card-t">Three Schools Commission</div>
+            <p class="card-d">Celebrates the Miami Hurricanes, Wake Forest Demon Deacons, and Michigan Wolverines traditions and athletes.</p>
+        </div>
+    </div>
+</section>
+
+<!-- COLLECTIONS -->
+<section id="collections">
+    <div class="collections-header">
+        <span class="lbl">Browse by Theme</span>
+        <h2 class="sec-h rv">The<br>Collections</h2>
+    </div>
+    <div class="coll-grid">
+
+        <div class="coll coll-music rv">
+            <div class="coll-ghost">MUSIC</div>
+            <span class="coll-num lbl-pink">Series 01 &nbsp;·&nbsp; Music Entertainment</span>
+            <h3 class="coll-t">Music Entertainment</h3>
+            <div class="tags">
+                <span class="tag">Prince Tribute</span><span class="tag">Queen Tribute</span>
+                <span class="tag">Grateful Dead</span><span class="tag">The Beatles</span>
+                <span class="tag">Taylor Swift</span><span class="tag">Santana Commission</span>
+                <span class="tag">It's All Country</span><span class="tag">Hip Hop &amp; Rap</span>
+                <span class="tag">Guitar Legends</span><span class="tag">Rock Stars Tribute</span>
+            </div>
+        </div>
+
+        <div class="coll coll-classic rv">
+            <div class="coll-ghost">CLASSIC</div>
+            <span class="coll-num lbl-cyan">Series 02 &nbsp;·&nbsp; Classic Entertainment</span>
+            <h3 class="coll-t">Classic Entertainment</h3>
+            <div class="tags">
+                <span class="tag">Tolkien Classics</span><span class="tag">Star Wars Saga</span>
+                <span class="tag">Pokemon Friends</span><span class="tag">Armed Forces</span>
+                <span class="tag">Classic Quilt Blocks</span><span class="tag">Classic Sports Teams</span>
+                <span class="tag">Classic Video Games</span><span class="tag">Classic Parks</span>
+                <span class="tag">Classic Television</span><span class="tag">Playbill Musicals</span>
+                <span class="tag">Classic Movies</span><span class="tag">Classic Vinyl</span>
+                <span class="tag">Wildflower Guitars</span><span class="tag">Classic Strings</span>
+                <span class="tag">Classic Christmas</span><span class="tag">Muscle Cars</span>
+            </div>
+        </div>
+
+        <div class="coll coll-sports rv">
+            <div class="coll-ghost">SPORTS</div>
+            <span class="coll-num lbl-gold">Series 03 &nbsp;·&nbsp; All Sports</span>
+            <h3 class="coll-t">Sports Teams</h3>
+            <div class="tags">
+                <span class="tag">NFL Teams</span><span class="tag">MLB Teams</span>
+                <span class="tag">NBA Teams</span><span class="tag">College Football</span>
+                <span class="tag">Wimbledon Champions</span><span class="tag">Women's Soccer</span>
+                <span class="tag">Wrestling Legends</span><span class="tag">The Masters</span>
+                <span class="tag">Dallas Stars</span><span class="tag">Main Events Boxing</span>
+                <span class="tag">Arizona Wildcats</span><span class="tag">Skateboard Session</span>
+                <span class="tag">Rodeo Tribute</span>
+            </div>
+        </div>
+
+        <div class="coll coll-rivalry rv">
+            <div class="coll-ghost">RIVALRY</div>
+            <span class="coll-num" style="color:var(--green)">Series 04 &nbsp;·&nbsp; Conference Rivalries</span>
+            <h3 class="coll-t">Conference Rivalry</h3>
+            <div class="tags">
+                <span class="tag">Big 12 Showdown</span>
+                <span class="tag">Big 10 Trophy Party</span>
+                <span class="tag">SEC Tailgate Party</span>
+                <span class="tag">ACC Boat Party</span>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- TEAMS -->
+<section id="teams">
+    <span class="lbl lbl-gold">All Teams Available</span>
+    <h2 class="sec-h rv">Your Team.<br>On Canvas.</h2>
+
+    <div class="league rv">
+        <div class="league-h">NFL</div>
+        <div class="chip-list">
+            <span class="chip">Los Angeles Rams</span><span class="chip">Pittsburgh Steelers</span><span class="chip">Tampa Bay Buccaneers</span><span class="chip">Seattle Seahawks</span><span class="chip">San Francisco 49ers</span><span class="chip">Miami Dolphins</span><span class="chip">New Orleans Saints</span><span class="chip">New York Giants</span><span class="chip">Chicago Bears</span><span class="chip">KC Chiefs</span><span class="chip">New England Patriots</span><span class="chip">Philadelphia Eagles</span><span class="chip">Denver Broncos</span><span class="chip">Green Bay Packers</span><span class="chip">Minnesota Vikings</span><span class="chip">Dallas Cowboys</span>
+        </div>
+    </div>
+
+    <div class="league rv">
+        <div class="league-h">MLB</div>
+        <div class="chip-list">
+            <span class="chip">Atlanta Braves</span><span class="chip">Los Angeles Dodgers</span><span class="chip">Negro Leagues Tribute</span><span class="chip">Boston Red Sox</span><span class="chip">New York Yankees</span><span class="chip">Cincinnati Reds</span><span class="chip">St. Louis Cardinals</span><span class="chip">Houston Astros</span><span class="chip">Texas Rangers</span><span class="chip">Chicago Cubs</span><span class="chip">Minnesota Twins</span><span class="chip">New York Mets</span>
+        </div>
+    </div>
+
+    <div class="league rv">
+        <div class="league-h">NBA</div>
+        <div class="chip-list">
+            <span class="chip">Golden State Warriors</span><span class="chip">Los Angeles Lakers</span><span class="chip">Dallas Mavericks</span><span class="chip">Chicago Bulls</span><span class="chip">San Antonio Spurs</span><span class="chip">OKC Thunder</span>
+        </div>
+    </div>
+
+    <div class="league rv">
+        <div class="league-h">College Football</div>
+        <div class="chip-list">
+            <span class="chip">Indiana Hoosiers</span><span class="chip">BYU Cougars</span><span class="chip">Clemson Tigers</span><span class="chip">Georgia Bulldogs</span><span class="chip">Auburn Tigers</span><span class="chip">Tennessee Vols</span><span class="chip">Nebraska Cornhuskers</span><span class="chip">Oregon Ducks</span><span class="chip">Michigan Wolverines</span><span class="chip">Notre Dame</span><span class="chip">Arkansas Razorbacks</span><span class="chip">TCU Horned Frogs</span><span class="chip">Baylor Bears</span><span class="chip">Ohio State Buckeyes</span><span class="chip">OSU Cowboys</span><span class="chip">LSU Tigers</span><span class="chip">Texas Tech Red Raiders</span>
+        </div>
+    </div>
+</section>
+
+<!-- BIO -->
+<section id="bio">
+    <div class="bio-watermark">TJ</div>
+    <div class="bio-grid">
+        <div class="rv-l">
+            <span class="mono">T</span>
+            <h2>Thomas<br>Jordan</h2>
+            <span class="role">Oil Painter &nbsp;·&nbsp; BFA &nbsp;·&nbsp; Minneapolis</span>
+        </div>
+        <div class="rv-r">
+            <blockquote>"With all the creative high and low tech options people have to select art for their homes and places of business, it gives me a great sense of satisfaction that I can create an oil painting in my style that pleases them enough to want to own it."</blockquote>
+            <p>Thomas Jordan grew up in Minneapolis, Minnesota with brothers Jim and Dan, and parents Jack and Dorothy. His parents recognized his creative talents early and provided consistent encouragement and support throughout his childhood.</p>
+            <p>He earned a Bachelor of Fine Arts from the Minneapolis College of Art and Design before embarking on a successful 30-year career in apparel retail and wholesale. That commercial background gave him a deep understanding of what resonates — what moves people — which he now channels into every painting.</p>
+            <p>He now resides in Texas and Minnesota with his wife Karen, creating oil paintings that celebrate the cultural touchstones — sports championships, legendary musicians, beloved film franchises — that people hold closest to their hearts.</p>
+            <div class="bio-facts">
+                <div class="fact">
+                    <div class="fact-l">Education</div>
+                    <div class="fact-v">BFA · Minneapolis College of Art &amp; Design</div>
+                </div>
+                <div class="fact">
+                    <div class="fact-l">Based In</div>
+                    <div class="fact-v">Texas &amp; Minnesota</div>
+                </div>
+                <div class="fact">
+                    <div class="fact-l">Medium</div>
+                    <div class="fact-v">Oil on Canvas</div>
+                </div>
+                <div class="fact">
+                    <div class="fact-l">Commissions</div>
+                    <div class="fact-v">Open — Contact Tom Directly</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- DAISY -->
+<div class="daisy-strip rv">
+    <span class="daisy-paw">🐾</span>
+    <div class="daisy-h">Where's Daisy?</div>
+    <p class="daisy-p">Molly, Tom's beloved West Highland Terrier, appeared subtly hidden in nearly every painting before passing. Daisy now carries on this cherished tradition in every new work. Can you find Daisy? How about Miss Molly?</p>
+</div>
+
+<!-- SHOWS -->
+<section id="shows">
+    <span class="lbl">Live &amp; In Person</span>
+    <h2 class="sec-h rv">Art Shows<br>2026</h2>
+    <div class="shows-grid">
+        <div class="rv-l">
+            <h3 class="upcoming-h">Upcoming Shows</h3>
+            <div class="show">
+                <div class="show-d"><div class="mo">May</div><div class="dy">08</div></div>
+                <div class="show-i">
+                    <div class="s-name"><span class="live-dot"></span> Allen Art Fest</div>
+                    <div class="s-loc">McKinney, TX &nbsp;·&nbsp; May 8–10, 2026</div>
+                </div>
+            </div>
+            <div class="show">
+                <div class="show-d"><div class="mo">May</div><div class="dy">15</div></div>
+                <div class="show-i">
+                    <div class="s-name"><span class="live-dot"></span> Main Street Fest</div>
+                    <div class="s-loc">Grapevine, TX &nbsp;·&nbsp; May 15–17, 2026</div>
+                </div>
+            </div>
+        </div>
+        <div class="rv-r">
+            <h3 class="past-h">Shows Attended — 2026</h3>
+            <div class="show">
+                <div class="show-d"><div class="mo">Feb</div><div class="dy">14</div></div>
+                <div class="show-i">
+                    <div class="s-name">Millhouse Art Fest</div>
+                    <div class="s-loc">McKinney, TX &nbsp;·&nbsp; Feb 14–15</div>
+                </div>
+            </div>
+            <div class="show">
+                <div class="show-d"><div class="mo">Mar</div><div class="dy">20</div></div>
+                <div class="show-i">
+                    <div class="s-name">Golf Expo</div>
+                    <div class="s-loc">Plano, TX &nbsp;·&nbsp; Mar 20–22</div>
+                </div>
+            </div>
+            <div class="show">
+                <div class="show-d"><div class="mo">Apr</div><div class="dy">10</div></div>
+                <div class="show-i">
+                    <div class="s-name">Arts in Bloom</div>
+                    <div class="s-loc">McKinney, TX &nbsp;·&nbsp; Apr 10–12</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- COMMUNITY -->
+<div class="community rv">
+    <span class="lbl">Notable Presentations</span>
+    <h2 class="sec-h" style="text-align:center;">Art Meets<br>Community</h2>
+    <div class="community-cards">
+        <div class="card" style="--card-accent: var(--gold); text-align:left;">
+            <div class="card-t">Dallas Police Chief</div>
+            <p class="card-d">Dallas Police Chief Daniel Comeaux — a New Orleans native and Saints fan — received a Saints print presentation from Thomas Jordan Gallery.</p>
+        </div>
+        <div class="card" style="--card-accent: var(--gold); text-align:left;">
+            <div class="card-t">Fort Worth Police</div>
+            <p class="card-d">Fort Worth Police Commander Eddie Garcia previously received a Dallas Cowboys painting — a custom piece honoring his community service.</p>
+        </div>
+    </div>
+</div>
+
+<!-- CONTACT -->
+<section id="contact">
+    <span class="lbl">Get in Touch</span>
+    <h2 class="sec-h rv">Let's Create<br>Something</h2>
+    <div class="contact-layout">
+        <div class="rv-l">
+            <h3>Commission a custom oil painting, inquire about original works, or say hello. Tom can be contacted directly by phone or email.</h3>
+            <div class="ci">
+                <div class="ci-icon">📞</div>
+                <div>
+                    <div class="ci-lbl">Phone</div>
+                    <div class="ci-val"><a href="tel:4159488684">415.948.8684</a></div>
+                </div>
+            </div>
+            <div class="ci">
+                <div class="ci-icon">🛒</div>
+                <div>
+                    <div class="ci-lbl">Online Store</div>
+                    <div class="ci-val"><a href="https://thomas-jordan-gallery.myshopify.com" target="_blank">thomas-jordan-gallery.myshopify.com</a></div>
+                </div>
+            </div>
+            <div style="margin-top:2rem;">
+                <a href="https://thomas-jordan-gallery.myshopify.com" target="_blank" class="btn-primary">Visit the Store</a>
+            </div>
+        </div>
+        <div class="rv-r">
+            <div class="socials">
+                <a href="https://facebook.com/pages/Thomas-Jordan-Gallery/172491719480101" target="_blank" class="soc">
+                    <div class="soc-dot"></div> Facebook
+                </a>
+                <a href="https://instagram.com/thomasjordangallery" target="_blank" class="soc">
+                    <div class="soc-dot"></div> Instagram
+                </a>
+                <a href="https://twitter.com/ThomasJordanGa1" target="_blank" class="soc">
+                    <div class="soc-dot"></div> Twitter / X
+                </a>
+                <a href="https://pinterest.com/tjordangallery" target="_blank" class="soc">
+                    <div class="soc-dot"></div> Pinterest
+                </a>
+                <a href="https://linkedin.com/pub/thomas-jordan/7/27a/a8a" target="_blank" class="soc">
+                    <div class="soc-dot"></div> LinkedIn
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-logo">TJG</div>
+    <div class="footer-mid">
+        <p>Thomas Jordan Gallery &copy; 2026</p>
+        <p>Oil Paintings &nbsp;·&nbsp; Sports &amp; Entertainment Art &nbsp;·&nbsp; Commissions Welcome</p>
+    </div>
+    <div class="footer-daisy">🐾 Can you find Daisy?</div>
+</footer>
+
+<script>
+/* ─── CUSTOM CURSOR ─── */
+(function() {
+    const c = document.getElementById('cursor');
+    const r = document.getElementById('cursor-ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+    function lerp(a, b, t) { return a + (b - a) * t; }
+    function loop() {
+        rx = lerp(rx, mx, 0.12);
+        ry = lerp(ry, my, 0.12);
+        c.style.left  = mx + 'px';
+        c.style.top   = my + 'px';
+        r.style.left  = rx + 'px';
+        r.style.top   = ry + 'px';
+        requestAnimationFrame(loop);
+    }
+    loop();
+    document.querySelectorAll('a, button, .chip, .tag, .card, .stat, .soc, .ci').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            c.style.width  = '20px';
+            c.style.height = '20px';
+            r.style.width  = '60px';
+            r.style.height = '60px';
+        });
+        el.addEventListener('mouseleave', () => {
+            c.style.width  = '12px';
+            c.style.height = '12px';
+            r.style.width  = '40px';
+            r.style.height = '40px';
+        });
+    });
+})();
+
+/* ─── HERO CANVAS — PAINT DRIPS ─── */
+(function() {
+    const canvas = document.getElementById('hero-canvas');
+    const ctx    = canvas.getContext('2d');
+    const COLORS = ['#FFD700','#FF3CAC','#00F5FF','#39FF14','#FF6B35','#BF5FFF','#FF4500'];
+    let W, H, drops = [];
+
+    function resize() {
+        W = canvas.width  = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+    }
+
+    class Drop {
+        constructor(randomY) {
+            this.init(randomY);
+        }
+        init(randomY) {
+            this.x      = Math.random() * W;
+            this.y      = randomY ? Math.random() * H : -30;
+            this.r      = Math.random() * 2.2 + 0.6;
+            this.speed  = Math.random() * 1.2 + 0.25;
+            this.color  = COLORS[Math.floor(Math.random() * COLORS.length)];
+            this.alpha  = Math.random() * 0.45 + 0.08;
+            this.trail  = [];
+            this.maxT   = Math.floor(Math.random() * 80 + 40);
+            this.wobble = Math.random() * 0.5 - 0.25;
+            this.wFreq  = Math.random() * 0.02 + 0.01;
+            this.tick   = Math.random() * Math.PI * 2;
+        }
+        update() {
+            this.tick += this.wFreq;
+            this.x += Math.sin(this.tick) * this.wobble;
+            this.trail.push({ x: this.x, y: this.y });
+            if (this.trail.length > this.maxT) this.trail.shift();
+            this.y += this.speed;
+            if (this.y > H + 60) this.init(false);
+        }
+        draw() {
+            const tl = this.trail.length;
+            for (let i = 1; i < tl; i++) {
+                const t = i / tl;
+                ctx.beginPath();
+                ctx.moveTo(this.trail[i - 1].x, this.trail[i - 1].y);
+                ctx.lineTo(this.trail[i].x, this.trail[i].y);
+                ctx.strokeStyle = this.color;
+                ctx.globalAlpha = this.alpha * t * 0.5;
+                ctx.lineWidth   = this.r * t;
+                ctx.stroke();
+            }
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+            ctx.fillStyle   = this.color;
+            ctx.globalAlpha = this.alpha;
+            ctx.shadowBlur  = 12;
+            ctx.shadowColor = this.color;
+            ctx.fill();
+            ctx.shadowBlur  = 0;
+            ctx.globalAlpha = 1;
+        }
+    }
+
+    function init() {
+        resize();
+        drops = Array.from({ length: 120 }, () => new Drop(true));
+    }
+
+    function frame() {
+        ctx.clearRect(0, 0, W, H);
+        drops.forEach(d => { d.update(); d.draw(); });
+        requestAnimationFrame(frame);
+    }
+
+    window.addEventListener('resize', resize);
+    init();
+    frame();
+})();
+
+/* ─── TICKER ─── */
+(function() {
+    const items = [
+        'Prince Tribute','Queen Tribute','Grateful Dead','The Beatles','Taylor Swift',
+        'Santana','It\'s All Country','Hip Hop & Rap','Guitar Legends','Rock Stars',
+        'Tolkien Classics','Star Wars Saga','Pokemon Friends','Armed Forces',
+        'Classic Video Games','Classic Parks','Classic Television','Classic Movies',
+        'Classic Vinyl','Wildflower Guitars','Muscle Cars','Big 12 Showdown',
+        'Big 10 Trophy Party','SEC Tailgate Party','ACC Boat Party',
+        'LA Rams','Pittsburgh Steelers','Dallas Cowboys','KC Chiefs','Green Bay Packers',
+        'Atlanta Braves','NY Yankees','LA Dodgers','Houston Astros','Texas Rangers',
+        'Golden State Warriors','LA Lakers','OKC Thunder','Chicago Bulls',
+        'Indiana Hoosiers','Georgia Bulldogs','Ohio State','Notre Dame',
+        'Wimbledon Champions','The Masters','Boxing Tribute','Rodeo Tribute'
+    ];
+    const track = document.getElementById('ticker');
+    const doubled = [...items, ...items];
+    track.innerHTML = doubled.map(t => `<span class="ticker-item">${t}</span><span class="ticker-sep">◆</span>`).join('');
+})();
+
+/* ─── NAV ─── */
+(function() {
+    const nav = document.getElementById('nav');
+    const onScroll = () => {
+        nav.classList.toggle('scrolled', window.scrollY > 60);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+})();
+
+/* ─── SCROLL REVEAL ─── */
+(function() {
+    const els = document.querySelectorAll('.rv, .rv-l, .rv-r');
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach((entry, i) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => entry.target.classList.add('on'), i * 70);
+                obs.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    els.forEach(el => obs.observe(el));
+})();
+</script>
+</body>
+</html>
