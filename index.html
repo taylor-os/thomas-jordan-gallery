@@ -680,6 +680,15 @@
             align-items: start;
             position: relative;
         }
+        .bio-photo {
+            display: block;
+            width: 100%;
+            max-width: 240px;
+            aspect-ratio: 4 / 5;
+            object-fit: cover;
+            border: 2px solid var(--gold);
+            margin-bottom: 2.5rem;
+        }
         .bio-left .mono {
             font-family: 'Bebas Neue', sans-serif;
             font-size: clamp(9rem, 18vw, 18rem);
@@ -1292,12 +1301,13 @@
 <section id="bio">
     <div class="bio-watermark">TJ</div>
     <div class="bio-grid">
-        <div class="rv-l">
+        <div class="bio-left rv-l">
+            <img src="images/thomas-jordan-bio.jpg" alt="Thomas Jordan, Artist" class="bio-photo">
             <span class="mono">T</span>
             <h2>Thomas<br>Jordan</h2>
             <span class="role">Oil Painter &nbsp;·&nbsp; BFA &nbsp;·&nbsp; Minneapolis</span>
         </div>
-        <div class="rv-r">
+        <div class="bio-right rv-r">
             <blockquote>"With all the creative high and low tech options people have to select art for their homes and places of business, it gives me a great sense of satisfaction that I can create an oil painting in my style that pleases them enough to want to own it."</blockquote>
             <p>Thomas Jordan grew up in Minneapolis, Minnesota with brothers Jim and Dan, and parents Jack and Dorothy. His parents recognized his creative talents early and provided consistent encouragement and support throughout his childhood.</p>
             <p>He earned a Bachelor of Fine Arts from the Minneapolis College of Art and Design before embarking on a successful 30-year career in apparel retail and wholesale. That commercial background gave him a deep understanding of what resonates — what moves people — which he now channels into every painting.</p>
